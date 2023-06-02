@@ -6,7 +6,7 @@
 rem ------------------------------------General params-------------------------------------- rem
 
 set EngineVersion=5.1
-set ProjectPureName=TestProject
+set ProjectPureName=AbsurdJump
 set Platform=Win64
 
 rem ---------------------------------------------------------------------------------------- rem
