@@ -12,14 +12,17 @@ class ABSURDJUMP_API AAJ_PlayerCharacter : public AAJ_CharacterBase
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
-	AAJ_PlayerCharacter();
-
-protected:
-	// Called when the game starts or when spawned
+	AAJ_PlayerCharacter(const FObjectInitializer& ObjectInitializer);
+	
 	virtual void BeginPlay() override;
-
-public:
-	// Called every frame
+	
 	virtual void Tick(float DeltaTime) override;
+	
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class USpringArmComponent* CameraBoom;
+
+	/** Follow camera */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class UCameraComponent* FollowCamera;
 };

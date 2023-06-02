@@ -3,24 +3,34 @@
 
 #include "AbsurdJump/Public/Character/Player/AJ_PlayerController.h"
 
+#include "Character/AJ_CharacterBase.h"
+#include "Framework/AJ_GameModeBase.h"
 
-// Sets default values
-AAJ_PlayerController::AAJ_PlayerController()
+
+void AAJ_PlayerController::SetPawn(APawn* InPawn)
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	Super::SetPawn(InPawn);
+	CharacterBase = Cast<AAJ_CharacterBase>(InPawn);
 }
 
-// Called when the game starts or when spawned
 void AAJ_PlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-// Called every frame
-void AAJ_PlayerController::Tick(float DeltaTime)
+void AAJ_PlayerController::SetupInputComponent()
 {
-	Super::Tick(DeltaTime);
+	// Super::SetupInputComponent();
+	//
+	// InputComponent->BindAxis("MoveForward", this, &AAJ_PlayerController::MoveForward);
+	// InputComponent->BindAxis("MoveRight", this, &AAJ_PlayerController::MoveRight);
+	// InputComponent->BindAxis("Turn", this, &AAJ_PlayerController::Turn);
+	// InputComponent->BindAxis("TurnAtRate", this, &AAJ_PlayerController::TurnAtRate);
+	// InputComponent->BindAxis("LookUp", this, &AAJ_PlayerController::LookUp);
+	// InputComponent->BindAxis("LookUpAtRate", this, &AAJ_PlayerController::LookUpAtRate);
+	//
+	// InputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &AAJ_PlayerController::Jump);
+
 }
 
