@@ -6,20 +6,24 @@
 #include "GameFramework/PlayerController.h"
 #include "AJ_PlayerController.generated.h"
 
+class UInputAction;
+
+
 UCLASS()
 class ABSURDJUMP_API AAJ_PlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
-	AAJ_PlayerController();
+	virtual void SetPawn(APawn* InPawn) override;
 
-protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
+protected:
+	
+	virtual void SetupInputComponent() override;
+	
 
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY()
+	class AAJ_CharacterBase* CharacterBase;
 };
