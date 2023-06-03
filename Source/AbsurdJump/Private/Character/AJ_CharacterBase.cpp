@@ -20,6 +20,7 @@ void AAJ_CharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+
 	
 }
 
