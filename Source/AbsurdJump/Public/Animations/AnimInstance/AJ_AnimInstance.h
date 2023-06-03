@@ -29,10 +29,10 @@ public:
 
 
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly, Category = "AnimInstance")
 	bool bIsSliding = false;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly, Category = "AnimInstance")
 	bool bIsLaunched = false;
 
 
