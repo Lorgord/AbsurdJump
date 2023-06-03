@@ -30,6 +30,11 @@ void UAJ_AnimInstance::NativeInitializeAnimation()
 void UAJ_AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
+	
+	if (!CharacterBase || !MovementComponent)
+	{
+		return;
+	}
 
 	bIsSliding = MovementComponent->bWantToSlide;
 	bIsLaunched = MovementComponent->bIsLaunched;
