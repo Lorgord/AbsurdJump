@@ -18,19 +18,3 @@ void AAJ_PlayerController::BeginPlay()
 	Super::BeginPlay();
 	
 }
-
-void AAJ_PlayerController::SetupInputComponent()
-{
-	// Super::SetupInputComponent();
-	//
-	// InputComponent->BindAxis("MoveForward", this, &AAJ_PlayerController::MoveForward);
-	// InputComponent->BindAxis("MoveRight", this, &AAJ_PlayerController::MoveRight);
-	// InputComponent->BindAxis("Turn", this, &AAJ_PlayerController::Turn);
-	// InputComponent->BindAxis("TurnAtRate", this, &AAJ_PlayerController::TurnAtRate);
-	// InputComponent->BindAxis("LookUp", this, &AAJ_PlayerController::LookUp);
-	// InputComponent->BindAxis("LookUpAtRate", this, &AAJ_PlayerController::LookUpAtRate);
-	//
-	// InputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &AAJ_PlayerController::Jump);
-
-}
-

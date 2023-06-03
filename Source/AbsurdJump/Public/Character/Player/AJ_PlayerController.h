@@ -19,10 +19,6 @@ public:
 
 	virtual void BeginPlay() override;
 	
-protected:
-	
-	virtual void SetupInputComponent() override;
-	
 
 	UPROPERTY()
 	class AAJ_CharacterBase* CharacterBase;

@@ -21,12 +21,32 @@ public:
 	
 	virtual void Tick(float DeltaTime) override;
 
-	
-	
-	// virtual void Jump() override;
-	// virtual bool CanJumpInternal_Implementation() const override;
 
 
+
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Character | Slide")
+	void OnSlideStart();
+	virtual void OnSlideStart_Implementation();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Character | Slide")
+	void OnSlideEnd();
+	virtual void OnSlideEnd_Implementation();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Character | Fly")
+	void Boost();
+	virtual void Boost_Implementation();
+
+	UFUNCTION(BlueprintCallable, Category = "Character | Fly")
+	bool CanBoost();
+
+
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character | Launch")
+	FVector LaunchVector = FVector::ZeroVector;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character | Launch")
+	FVector BoostVector = FVector::ZeroVector;
 
 	
 	UPROPERTY()

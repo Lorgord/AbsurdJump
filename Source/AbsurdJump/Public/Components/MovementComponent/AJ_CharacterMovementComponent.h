@@ -13,14 +13,43 @@ class ABSURDJUMP_API UAJ_CharacterMovementComponent : public UCharacterMovementC
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this component's properties
-	UAJ_CharacterMovementComponent();
-
-protected:
-	// Called when the game starts
+	UAJ_CharacterMovementComponent(const FObjectInitializer& ObjectInitializer);
+	
 	virtual void BeginPlay() override;
 
-public:
-	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+
+	
+
+	UFUNCTION(BlueprintCallable, Category = "Movement | Slide")
+	void BeginSlide();
+
+	UFUNCTION(BlueprintCallable, Category = "Movement | Slide")
+	void Slide();
+
+	UFUNCTION(BlueprintCallable, Category = "Movement | Slide")
+	void EndSlide();
+
+	UFUNCTION(BlueprintCallable, Category = "Movement | OnFly")
+	void OnFly();
+
+
+
+	
+
+	UPROPERTY(EditDefaultsOnly, Category = "Movement | Slide")
+	float SlideImpulse = 300.0f;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement | Slide")
+	bool bIsLaunched = false;
+	
+	UPROPERTY(BlueprintReadOnly, Category = "Movement | Slide")
+	bool bWantToSlide = false;
+
+
+private:
+
+	UPROPERTY()
+	float SlideLineTraceDistance = 100.0f;
 };

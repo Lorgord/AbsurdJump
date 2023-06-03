@@ -19,8 +19,7 @@ AAJ_CharacterBase::AAJ_CharacterBase(const FObjectInitializer& ObjectInitializer
 void AAJ_CharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-
+	
 	
 }
 
@@ -29,6 +28,34 @@ void AAJ_CharacterBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+
+
+void AAJ_CharacterBase::OnSlideStart_Implementation()
+{
+	MovementComponent->BeginSlide();
+}
+
+void AAJ_CharacterBase::OnSlideEnd_Implementation()
+{
+	MovementComponent->EndSlide();
+
+	LaunchCharacter(LaunchVector, false, false);
+}
+
+void AAJ_CharacterBase::Boost_Implementation()
+{
+	if (!CanBoost())
+	{
+		return;
+	}
+	
+	LaunchCharacter(BoostVector, false, false);
+}
+
+bool AAJ_CharacterBase::CanBoost()
+{
+	return MovementComponent->bIsLaunched;
+}
 
 
 
