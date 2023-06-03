@@ -3,6 +3,7 @@
 
 #include "AbsurdJump/Public/Character/AJ_CharacterBase.h"
 
+#include "Components/CharacterEquipmentComponent/AJ_CharacterEquipmentComponent.h"
 #include "Components/MovementComponent/AJ_CharacterMovementComponent.h"
 
 
@@ -10,6 +11,8 @@ AAJ_CharacterBase::AAJ_CharacterBase(const FObjectInitializer& ObjectInitializer
 : Super(ObjectInitializer.SetDefaultSubobjectClass<UAJ_CharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
 	MovementComponent = Cast<UAJ_CharacterMovementComponent>(GetCharacterMovement());
+	EquipmentComponent = CreateDefaultSubobject<UAJ_CharacterEquipmentComponent>(TEXT("EquipmentComponent"));
+
 	
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -55,6 +58,11 @@ void AAJ_CharacterBase::Boost_Implementation()
 bool AAJ_CharacterBase::CanBoost()
 {
 	return MovementComponent->bIsLaunched;
+}
+
+void AAJ_CharacterBase::Fire_Implementation()
+{
+	EquipmentComponent->Fire();
 }
 
 

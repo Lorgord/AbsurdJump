@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "AJ_CharacterBase.generated.h"
 
+class UAJ_CharacterEquipmentComponent;
 class UAJ_CharacterMovementComponent;
 
 UCLASS()
@@ -41,6 +42,12 @@ public:
 	bool CanBoost();
 
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Character | Slide")
+	void Fire();
+	virtual void Fire_Implementation();
+
+
+	
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character | Launch")
 	FVector LaunchVector = FVector::ZeroVector;
@@ -48,7 +55,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character | Launch")
 	FVector BoostVector = FVector::ZeroVector;
 
+
+	
 	
 	UPROPERTY()
 	UAJ_CharacterMovementComponent* MovementComponent;
+
+	UPROPERTY()
+	UAJ_CharacterEquipmentComponent* EquipmentComponent;
 };
