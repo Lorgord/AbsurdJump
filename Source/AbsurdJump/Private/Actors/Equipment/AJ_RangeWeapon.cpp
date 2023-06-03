@@ -3,8 +3,6 @@
 
 #include "Actors/Equipment/AJ_RangeWeapon.h"
 
-#include "Components/Weapon/AJ_WeaponBarrelComponent.h"
-
 
 AAJ_RangeWeapon::AAJ_RangeWeapon()
 {
@@ -13,7 +11,7 @@ AAJ_RangeWeapon::AAJ_RangeWeapon()
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh"));
 	WeaponMesh->SetupAttachment(RootComponent);
 
-	WeaponBarrel = CreateDefaultSubobject<UAJ_WeaponBarrelComponent>(TEXT("WeaponBarrel"));
+	WeaponBarrel = CreateDefaultSubobject<USceneComponent>(TEXT("WeaponBarrel"));
 	WeaponBarrel->SetupAttachment(WeaponMesh, FName("MuzzleSocket"));
 }
 
@@ -25,10 +23,5 @@ void AAJ_RangeWeapon::BeginPlay()
 void AAJ_RangeWeapon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-}
-
-void AAJ_RangeWeapon::Fire()
-{
-	
 }
 

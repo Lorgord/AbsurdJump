@@ -19,7 +19,7 @@ void UAJ_CharacterEquipmentComponent::BeginPlay()
 
 	CharacterBase = Cast<AAJ_CharacterBase>(GetOwner());
 
-	CurrentWeapon = GetWorld()->SpawnActor<AAJ_RangeWeapon>();
+	CurrentWeapon = GetWorld()->SpawnActor<AAJ_RangeWeapon>(WeaponClass);
 	CurrentWeapon->AttachToComponent(CharacterBase->GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName("WeaponSocket"));
 }
 
@@ -29,10 +29,5 @@ void UAJ_CharacterEquipmentComponent::TickComponent(float DeltaTime, ELevelTick 
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-}
-
-void UAJ_CharacterEquipmentComponent::Fire()
-{
-	CurrentWeapon->Fire();
 }
 

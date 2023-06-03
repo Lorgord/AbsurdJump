@@ -19,10 +19,10 @@ public:
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
+	
 
-
-	void Fire();
-
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Equipable | Fire")
+	TSubclassOf<AActor> Projectile;
 
 protected:
 
@@ -30,5 +30,5 @@ protected:
 	USkeletalMeshComponent* WeaponMesh;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Equipable | Components")
-	UAJ_WeaponBarrelComponent* WeaponBarrel;
+	USceneComponent* WeaponBarrel;
 };

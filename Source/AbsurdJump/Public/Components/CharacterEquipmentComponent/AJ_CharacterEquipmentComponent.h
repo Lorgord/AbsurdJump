@@ -22,12 +22,11 @@ public:
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+	TSubclassOf<AAJ_RangeWeapon> WeaponClass;
 
-
-	void Fire();
 	
-	
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly, Category = "Weapon")
 	AAJ_RangeWeapon* CurrentWeapon;
 
 	UPROPERTY()
