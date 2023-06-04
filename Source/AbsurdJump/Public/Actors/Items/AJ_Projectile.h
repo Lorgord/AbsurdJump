@@ -21,19 +21,14 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-
-	void FireInDirection(const FVector& ShootDirection);
+	UFUNCTION(BlueprintCallable, Category = "Projectile")
+	void FireInDirection(const FVector& ShootDirection, float CharacterVelocity);
 
 	
 
-	UPROPERTY(VisibleDefaultsOnly, Category = "Projectile | Components")
-	USphereComponent* CollisionComponent;
-	
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile | Components")
 	UStaticMeshComponent* ProjectileMesh;
-
-	UPROPERTY(VisibleDefaultsOnly, Category = "Projectile | Components")
-	UMaterialInstanceDynamic* ProjectileMaterialInstance;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile | Components")
 	UProjectileMovementComponent* ProjectileMovementComponent;

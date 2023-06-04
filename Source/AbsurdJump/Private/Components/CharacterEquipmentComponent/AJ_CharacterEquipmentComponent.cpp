@@ -20,37 +20,51 @@ void UAJ_CharacterEquipmentComponent::BeginPlay()
 
 	CharacterBase = Cast<AAJ_CharacterBase>(GetOwner());
 
-	CurrentWeapon = GetWorld()->SpawnActor<AAJ_RangeWeapon>(WeaponClass);
-	CurrentWeapon->AttachToComponent(CharacterBase->GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName("WeaponSocket"));
+	if (WeaponClass)
+	{
+		CurrentWeapon = GetWorld()->SpawnActor<AAJ_RangeWeapon>(WeaponClass);
+		CurrentWeapon->AttachToComponent(CharacterBase->GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName("WeaponSocket"));
+	}
 }
 
 void UAJ_CharacterEquipmentComponent::Fire()
 {
-	if (!CurrentWeapon || !Projectile || !CanFire())
+	if (!CurrentWeapon || !CanFire())
 	{
 		return;
 	}
 
+	CurrentAmmo -= 1;
+
+	
 	FVector CameraLocation;
 	FRotator CameraRotation;
 	GetOwner()->GetActorEyesViewPoint(CameraLocation, CameraRotation);
-
+	
 	FVector MuzzleLocation = CurrentWeapon->WeaponMuzzle->GetComponentLocation();
 	FRotator MuzzleRotation = CameraRotation;
 
-	MuzzleRotation.Pitch += 10.0f;
+	FTransform Transform = FTransform(MuzzleRotation, MuzzleLocation);
+	
+	CharacterBase->OnFireEvent(Transform);
 
-	FActorSpawnParameters SpawnParameters;
-	SpawnParameters.Owner = GetOwner();
-	SpawnParameters.Instigator = GetOwner()->GetInstigator();
-
-	AAJ_Projectile* NewProjectile = GetWorld()->SpawnActor<AAJ_Projectile>(Projectile, MuzzleLocation, MuzzleRotation, SpawnParameters);
-
-	if (NewProjectile)
-	{
-		NewProjectile->FireInDirection(MuzzleRotation.Vector());
-		DrawDebugLine(GetWorld(), MuzzleLocation, MuzzleLocation + MuzzleRotation.Vector() * 100.0f, FColor::Green, true, 5.0f);
-	}
+	//............................................................Working only in BP..........................................................//
+	
+	//MuzzleRotation.Pitch += 10.0f;
+	
+	// FActorSpawnParameters SpawnParameters;
+	// SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	// // SpawnParameters.bNoFail = true;
+	// // SpawnParameters.Owner = GetOwner();
+	// // SpawnParameters.Instigator = GetOwner()->GetInstigator();
+	//
+	// AAJ_Projectile* NewProjectile = GetWorld()->SpawnActor<AAJ_Projectile>(Projectile, MuzzleLocation, MuzzleRotation, SpawnParameters);
+	//
+	// if (NewProjectile)
+	// {
+	// 	//NewProjectile->FireInDirection(MuzzleRotation.Vector());
+	// 	DrawDebugLine(GetWorld(), MuzzleLocation, MuzzleLocation + MuzzleRotation.Vector() * 100.0f, FColor::Green, true, 5.0f);
+	// }
 }
 
 bool UAJ_CharacterEquipmentComponent::CanFire()

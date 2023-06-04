@@ -28,8 +28,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Equipment | Weapon")
 	bool CanFire();
 
-
-
 	
 	
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Equipment | Ammo")
@@ -43,10 +41,10 @@ public:
 		FVector MuzzleOffset = FVector::ZeroVector;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Equipment | Weapon")
-		TSubclassOf<AAJ_Projectile> Projectile = nullptr;
+		TSubclassOf<AAJ_Projectile> Projectile;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Equipment | Weapon")
-		TSubclassOf<AAJ_RangeWeapon> WeaponClass = nullptr;
+		TSubclassOf<AAJ_RangeWeapon> WeaponClass;
 	
 	UPROPERTY(BlueprintReadOnly, Category = "Equipment | Weapon")
 		AAJ_RangeWeapon* CurrentWeapon = nullptr;	

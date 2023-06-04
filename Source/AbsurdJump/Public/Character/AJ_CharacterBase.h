@@ -48,6 +48,9 @@ public:
 		void Fire();
 		virtual void Fire_Implementation();
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Equipment | Weapon")
+		void OnFireEvent(FTransform Transform);
+		virtual void OnFireEvent_Implementation(FTransform Transform) { return; }
 
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Character | State")
@@ -58,7 +61,7 @@ public:
 		bool IsDead();
 
 	UFUNCTION(BlueprintCallable, Category = "Character | Death")
-	void EnableRagdoll();	
+		void EnableRagdoll();	
 	
 
 

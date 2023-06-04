@@ -80,7 +80,7 @@ bool AAJ_CharacterBase::IsDead()
 
 void AAJ_CharacterBase::EnableRagdoll()
 {
-	GetMesh()->SetCollisionProfileName(FName("Ragdoll"));
+	//GetMesh()->SetCollisionProfileName(FName("Ragdoll"));
 	GetMesh()->SetSimulatePhysics(true);
 }
 
