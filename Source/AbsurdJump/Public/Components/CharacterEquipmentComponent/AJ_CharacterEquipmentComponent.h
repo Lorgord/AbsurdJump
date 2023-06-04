@@ -7,6 +7,7 @@
 #include "AJ_CharacterEquipmentComponent.generated.h"
 
 
+class AAJ_Projectile;
 class AAJ_CharacterBase;
 class AAJ_RangeWeapon;
 
@@ -20,16 +21,39 @@ public:
 
 	virtual void BeginPlay() override;
 
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-	TSubclassOf<AAJ_RangeWeapon> WeaponClass;
+	UFUNCTION(BlueprintCallable, Category = "Equipment | Weapon")
+	void Fire();
+
+	UFUNCTION(BlueprintCallable, Category = "Equipment | Weapon")
+	bool CanFire();
+
+
 
 	
-	UPROPERTY(BlueprintReadOnly, Category = "Weapon")
-	AAJ_RangeWeapon* CurrentWeapon;
+	
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Equipment | Ammo")
+		int MaxAmmo = 10;
 
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Equipment | Ammo")
+		int CurrentAmmo = 9;
+
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment | Weapon")
+		FVector MuzzleOffset = FVector::ZeroVector;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Equipment | Weapon")
+		TSubclassOf<AAJ_Projectile> Projectile = nullptr;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Equipment | Weapon")
+		TSubclassOf<AAJ_RangeWeapon> WeaponClass = nullptr;
+	
+	UPROPERTY(BlueprintReadOnly, Category = "Equipment | Weapon")
+		AAJ_RangeWeapon* CurrentWeapon = nullptr;	
+
+
+	
 	UPROPERTY()
-	AAJ_CharacterBase* CharacterBase;
+		AAJ_CharacterBase* CharacterBase = nullptr;
 	
 };

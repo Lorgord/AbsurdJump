@@ -35,7 +35,8 @@ public:
 	void OnFly();
 
 
-
+	UFUNCTION(BlueprintCallable, Category = "Movement | Death")
+	void OnDeath();
 	
 
 	UPROPERTY(EditDefaultsOnly, Category = "Movement | Slide")

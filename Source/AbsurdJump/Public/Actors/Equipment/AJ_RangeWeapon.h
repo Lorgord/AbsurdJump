@@ -23,12 +23,11 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Equipable | Fire")
 	TSubclassOf<AActor> Projectile;
-
-protected:
+	
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Equipable | Components")
 	USkeletalMeshComponent* WeaponMesh;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Equipable | Components")
-	USceneComponent* WeaponBarrel;
+	USceneComponent* WeaponMuzzle;
 };

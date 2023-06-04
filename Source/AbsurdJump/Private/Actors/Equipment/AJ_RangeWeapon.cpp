@@ -11,8 +11,8 @@ AAJ_RangeWeapon::AAJ_RangeWeapon()
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh"));
 	WeaponMesh->SetupAttachment(RootComponent);
 
-	WeaponBarrel = CreateDefaultSubobject<USceneComponent>(TEXT("WeaponBarrel"));
-	WeaponBarrel->SetupAttachment(WeaponMesh, FName("MuzzleSocket"));
+	WeaponMuzzle = CreateDefaultSubobject<USceneComponent>(TEXT("WeaponBarrel"));
+	WeaponMuzzle->SetupAttachment(WeaponMesh, FName("MuzzleSocket"));
 }
 
 void AAJ_RangeWeapon::BeginPlay()

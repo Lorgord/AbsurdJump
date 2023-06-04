@@ -11,7 +11,7 @@ AAJ_CharacterBase::AAJ_CharacterBase(const FObjectInitializer& ObjectInitializer
 : Super(ObjectInitializer.SetDefaultSubobjectClass<UAJ_CharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
 	MovementComponent = Cast<UAJ_CharacterMovementComponent>(GetCharacterMovement());
-	//EquipmentComponent = CreateDefaultSubobject<UAJ_CharacterEquipmentComponent>(TEXT("EquipmentComponent"));
+	EquipmentComponent = CreateDefaultSubobject<UAJ_CharacterEquipmentComponent>(TEXT("EquipmentComponent"));
 
 	
 	bUseControllerRotationPitch = false;
@@ -62,6 +62,26 @@ bool AAJ_CharacterBase::CanBoost()
 
 void AAJ_CharacterBase::Fire_Implementation()
 {
+	EquipmentComponent->Fire();
+}
+
+
+
+
+void AAJ_CharacterBase::KillPlayer_Implementation()
+{
+	MovementComponent->OnDeath();
+}
+
+bool AAJ_CharacterBase::IsDead()
+{
+	return bIsDead;
+}
+
+void AAJ_CharacterBase::EnableRagdoll()
+{
+	GetMesh()->SetCollisionProfileName(FName("Ragdoll"));
+	GetMesh()->SetSimulatePhysics(true);
 }
 
 

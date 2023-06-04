@@ -90,5 +90,10 @@ void UAJ_CharacterMovementComponent::OnFly()
 	GetOwner()->SetActorRotation(Rotator);
 }
 
+void UAJ_CharacterMovementComponent::OnDeath()
+{
+	DisableMovement();
+}
+
 
 

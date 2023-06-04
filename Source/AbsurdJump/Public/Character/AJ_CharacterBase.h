@@ -27,28 +27,43 @@ public:
 
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Character | Slide")
-	void OnSlideStart();
-	virtual void OnSlideStart_Implementation();
+		void OnSlideStart();
+		virtual void OnSlideStart_Implementation();
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Character | Slide")
-	void OnSlideEnd();
-	virtual void OnSlideEnd_Implementation();
+		void OnSlideEnd();
+		virtual void OnSlideEnd_Implementation();
+	
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Character | Fly")
-	void Boost();
-	virtual void Boost_Implementation();
+		void Boost();
+		virtual void Boost_Implementation();
 
 	UFUNCTION(BlueprintCallable, Category = "Character | Fly")
-	bool CanBoost();
-
-
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Character | Slide")
-	void Fire();
-	virtual void Fire_Implementation();
-
+		bool CanBoost();
 
 	
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Character | Slide")
+		void Fire();
+		virtual void Fire_Implementation();
+
+
+	
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Character | State")
+		void KillPlayer();
+		virtual void KillPlayer_Implementation();
+	
+	UFUNCTION(BlueprintCallable, Category = "Character | Death")
+		bool IsDead();
+
+	UFUNCTION(BlueprintCallable, Category = "Character | Death")
+	void EnableRagdoll();	
+	
+
+
+
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character | Launch")
 	FVector LaunchVector = FVector::ZeroVector;
 
@@ -57,10 +72,14 @@ public:
 
 
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Character | State")
+	bool bIsDead = false;
 	
-	UPROPERTY()
+
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character | Components")
 	UAJ_CharacterMovementComponent* MovementComponent;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character | Components")
 	UAJ_CharacterEquipmentComponent* EquipmentComponent;
 };
