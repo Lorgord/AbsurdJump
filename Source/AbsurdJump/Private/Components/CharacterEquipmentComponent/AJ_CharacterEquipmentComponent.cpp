@@ -35,6 +35,9 @@ void UAJ_CharacterEquipmentComponent::Fire()
 	}
 
 	CurrentAmmo -= 1;
+	AmmoUpdate();
+	
+	
 
 	
 	FVector CameraLocation;
@@ -70,5 +73,17 @@ void UAJ_CharacterEquipmentComponent::Fire()
 bool UAJ_CharacterEquipmentComponent::CanFire()
 {
 	return CurrentAmmo != 0;
+}
+
+void UAJ_CharacterEquipmentComponent::GiveAmmo(int Amount)
+{
+	CurrentAmmo += Amount;
+	AmmoUpdate();
+}
+
+int UAJ_CharacterEquipmentComponent::AmmoUpdate_Implementation()
+{
+	OnAmmoChanged.Broadcast(CurrentAmmo);
+	return CurrentAmmo;
 }
 

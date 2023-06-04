@@ -11,6 +11,8 @@ class AAJ_Projectile;
 class AAJ_CharacterBase;
 class AAJ_RangeWeapon;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAmmoChanged, int, Ammo);
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class ABSURDJUMP_API UAJ_CharacterEquipmentComponent : public UActorComponent
 {
@@ -28,7 +30,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Equipment | Weapon")
 	bool CanFire();
 
-	
+	UFUNCTION(BlueprintCallable, Category = "Equipment | Ammo")
+	void GiveAmmo(int Amount);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Equipment | Ammo")
+	int AmmoUpdate();
+	virtual int AmmoUpdate_Implementation();
+
+	UPROPERTY(BlueprintAssignable, Category = "OnAmmoChanged")
+	FOnAmmoChanged OnAmmoChanged;
 	
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Equipment | Ammo")
 		int MaxAmmo = 10;
