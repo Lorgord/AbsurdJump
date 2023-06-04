@@ -10,6 +10,10 @@
 class UAJ_CharacterEquipmentComponent;
 class UAJ_CharacterMovementComponent;
 
+
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnScoreUpdated);
+
 UCLASS()
 class ABSURDJUMP_API AAJ_CharacterBase : public ACharacter
 {
@@ -52,19 +56,35 @@ public:
 		void OnFireEvent(FTransform Transform);
 		virtual void OnFireEvent_Implementation(FTransform Transform) { return; }
 
+
+	UFUNCTION()
+		void OnActorHitEvent(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
+
 	
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Character | State")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Character | Death")
 		void KillPlayer();
 		virtual void KillPlayer_Implementation();
 	
 	UFUNCTION(BlueprintCallable, Category = "Character | Death")
 		bool IsDead();
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Character | Death")
+		void OnDeath();
+		virtual void OnDeath_Implementation() { return; }
+
 	UFUNCTION(BlueprintCallable, Category = "Character | Death")
 		void EnableRagdoll();	
 	
 
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Character | Score")
+		void AddScore(int Score);
+		virtual void AddScore_Implementation(int Score);
+
+	UPROPERTY(BlueprintAssignable, Category = "Character | Score")
+		FOnScoreUpdated OnScoreUpdated;
+	
+	
 
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character | Launch")
@@ -74,11 +94,17 @@ public:
 	FVector BoostVector = FVector::ZeroVector;
 
 
-	
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Character | State")
 	bool bIsDead = false;
 	
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Character | State")
+	float CurrentScore = 0.0f;
+	
 
+
+	
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character | Components")
 	UAJ_CharacterMovementComponent* MovementComponent;

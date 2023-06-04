@@ -6,6 +6,7 @@
 #include "Actors/Equipment/AJ_RangeWeapon.h"
 #include "Actors/Items/AJ_Projectile.h"
 #include "Character/AJ_CharacterBase.h"
+#include "Components/MovementComponent/AJ_CharacterMovementComponent.h"
 
 
 UAJ_CharacterEquipmentComponent::UAJ_CharacterEquipmentComponent()
@@ -72,7 +73,7 @@ void UAJ_CharacterEquipmentComponent::Fire()
 
 bool UAJ_CharacterEquipmentComponent::CanFire()
 {
-	return CurrentAmmo != 0;
+	return CurrentAmmo != 0 && !CharacterBase->bIsDead && (CharacterBase->MovementComponent->bWantToSlide || CharacterBase->MovementComponent->bIsLaunched);
 }
 
 void UAJ_CharacterEquipmentComponent::GiveAmmo(int Amount)
@@ -83,7 +84,8 @@ void UAJ_CharacterEquipmentComponent::GiveAmmo(int Amount)
 
 int UAJ_CharacterEquipmentComponent::AmmoUpdate_Implementation()
 {
-	OnAmmoChanged.Broadcast(CurrentAmmo);
+	OnAmmoUpdated.Broadcast();
+	
 	return CurrentAmmo;
 }
 

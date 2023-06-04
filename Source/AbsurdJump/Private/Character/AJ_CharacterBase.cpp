@@ -23,6 +23,7 @@ void AAJ_CharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	OnActorHit.AddDynamic(this, &AAJ_CharacterBase::OnActorHitEvent);
 	
 }
 
@@ -66,11 +67,21 @@ void AAJ_CharacterBase::Fire_Implementation()
 }
 
 
+void AAJ_CharacterBase::OnActorHitEvent(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
+{
+	if (!MovementComponent->bIsLaunched || MovementComponent->bWantToSlide)
+	{
+		return;
+	}
 
+	KillPlayer();
+}
 
 void AAJ_CharacterBase::KillPlayer_Implementation()
 {
 	MovementComponent->OnDeath();
+	EnableRagdoll();
+	bIsDead = true;
 }
 
 bool AAJ_CharacterBase::IsDead()
@@ -80,9 +91,13 @@ bool AAJ_CharacterBase::IsDead()
 
 void AAJ_CharacterBase::EnableRagdoll()
 {
-	//GetMesh()->SetCollisionProfileName(FName("Ragdoll"));
+	GetMesh()->SetCollisionProfileName(FName("Ragdoll"));
 	GetMesh()->SetSimulatePhysics(true);
 }
 
-
-
+void AAJ_CharacterBase::AddScore_Implementation(int Score)
+{
+	CurrentScore = Score;
+	
+	OnScoreUpdated.Broadcast();
+}
