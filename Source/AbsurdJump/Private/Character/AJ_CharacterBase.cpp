@@ -82,6 +82,7 @@ void AAJ_CharacterBase::KillPlayer_Implementation()
 	MovementComponent->OnDeath();
 	EnableRagdoll();
 	bIsDead = true;
+	OnPlayerDeath.Broadcast();
 }
 
 bool AAJ_CharacterBase::IsDead()

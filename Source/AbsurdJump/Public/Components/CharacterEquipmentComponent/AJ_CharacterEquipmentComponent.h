@@ -40,8 +40,6 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "OnAmmoChanged")
 	FOnAmmoUpdated OnAmmoUpdated;
 	
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Equipment | Ammo")
-		int MaxAmmo = 10;
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Equipment | Ammo")
 		int CurrentAmmo = 9;

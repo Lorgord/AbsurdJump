@@ -6,6 +6,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "AJ_CharacterMovementComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnStart);
+
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class ABSURDJUMP_API UAJ_CharacterMovementComponent : public UCharacterMovementComponent
@@ -19,7 +21,8 @@ public:
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-
+	UPROPERTY(BlueprintAssignable, Category = "Movement | Slide")
+	FOnStart OnStart;
 	
 
 	UFUNCTION(BlueprintCallable, Category = "Movement | Slide")

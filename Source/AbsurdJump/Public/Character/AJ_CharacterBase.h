@@ -13,6 +13,7 @@ class UAJ_CharacterMovementComponent;
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnScoreUpdated);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerDeath);
 
 UCLASS()
 class ABSURDJUMP_API AAJ_CharacterBase : public ACharacter
@@ -83,6 +84,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Character | Score")
 		FOnScoreUpdated OnScoreUpdated;
+
+	UPROPERTY(BlueprintAssignable, Category = "Character | Score")
+		FOnPlayerDeath OnPlayerDeath;
 	
 	
 

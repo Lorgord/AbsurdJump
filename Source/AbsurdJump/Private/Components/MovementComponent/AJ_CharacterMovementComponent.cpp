@@ -30,7 +30,7 @@ void UAJ_CharacterMovementComponent::TickComponent(float DeltaTime, ELevelTick T
 
 void UAJ_CharacterMovementComponent::BeginSlide()
 {
-	if (IsFalling())
+	if (IsFalling() || bIsLaunched)
 	{
 		return;
 	}
@@ -44,7 +44,8 @@ void UAJ_CharacterMovementComponent::BeginSlide()
 	bOrientRotationToMovement = false;
 
 	bWantToSlide = true;
-	
+
+	OnStart.Broadcast();
 }
 
 void UAJ_CharacterMovementComponent::Slide()
