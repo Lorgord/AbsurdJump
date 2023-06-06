@@ -98,7 +98,7 @@ void AAJ_CharacterBase::EnableRagdoll()
 
 void AAJ_CharacterBase::AddScore_Implementation(int Score)
 {
-	CurrentScore = Score;
+	CurrentScore += Score;
 	
 	OnScoreUpdated.Broadcast();
 }
