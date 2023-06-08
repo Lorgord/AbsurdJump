@@ -6,8 +6,8 @@
 #include "GameFramework/PlayerController.h"
 #include "AJ_PlayerController.generated.h"
 
-class UInputAction;
-
+class AAJ_GameHUD;
+class AAJ_PlayerCharacter;
 
 UCLASS()
 class ABSURDJUMP_API AAJ_PlayerController : public APlayerController
@@ -15,11 +15,26 @@ class ABSURDJUMP_API AAJ_PlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
-	virtual void SetPawn(APawn* InPawn) override;
 
 	virtual void BeginPlay() override;
 	
+	virtual void OnPossess(APawn* InPawn) override;
 
-	UPROPERTY()
-	class AAJ_CharacterBase* CharacterBase;
+
+	//Blueprint protected methods
+	protected:
+
+	UFUNCTION(BlueprintNativeEvent, Category = "PlayerController")
+	void OnGameStart(bool WasLoaded);
+	virtual void OnGameStart_Implementation(bool WasLoaded);
+
+
+//Blueprint values
+public:
+	
+	UPROPERTY(BlueprintReadOnly, Category = "PlayerController")
+		AAJ_GameHUD* GameHUD = nullptr;
+
+	UPROPERTY(BlueprintReadOnly, Category = "PlayerController")
+		AAJ_PlayerCharacter* PlayerCharacter = nullptr;
 };

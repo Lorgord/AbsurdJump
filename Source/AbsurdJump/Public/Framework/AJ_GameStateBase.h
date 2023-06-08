@@ -3,18 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameModeBase.h"
-#include "AJ_GameModeBase.generated.h"
+#include "GameFramework/GameStateBase.h"
+#include "AJ_GameStateBase.generated.h"
 
 UCLASS()
-class ABSURDJUMP_API AAJ_GameModeBase : public AGameModeBase
+class ABSURDJUMP_API AAJ_GameStateBase : public AGameStateBase
 {
 	GENERATED_BODY()
 
 public:
-	AAJ_GameModeBase();
-	
+	AAJ_GameStateBase();
+
 	virtual void BeginPlay() override;
-	
+
 	virtual void Tick(float DeltaTime) override;
+
+	
 };

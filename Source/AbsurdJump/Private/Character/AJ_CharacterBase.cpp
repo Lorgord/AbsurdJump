@@ -3,8 +3,8 @@
 
 #include "AbsurdJump/Public/Character/AJ_CharacterBase.h"
 
-#include "Components/CharacterEquipmentComponent/AJ_CharacterEquipmentComponent.h"
-#include "Components/MovementComponent/AJ_CharacterMovementComponent.h"
+#include "Components/CharacterComponents/EquipmentComponent/AJ_CharacterEquipmentComponent.h"
+#include "Components/CharacterComponents/MovementComponent/AJ_CharacterMovementComponent.h"
 
 
 AAJ_CharacterBase::AAJ_CharacterBase(const FObjectInitializer& ObjectInitializer)

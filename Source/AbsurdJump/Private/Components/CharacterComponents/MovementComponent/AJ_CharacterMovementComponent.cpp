@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Components/MovementComponent/AJ_CharacterMovementComponent.h"
+#include "Components/CharacterComponents/MovementComponent/AJ_CharacterMovementComponent.h"
 
 #include "Kismet/KismetMathLibrary.h"
 

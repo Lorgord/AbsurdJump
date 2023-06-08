@@ -3,16 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameModeBase.h"
-#include "AJ_GameModeBase.generated.h"
+#include "GameFramework/HUD.h"
+#include "AJ_GameHUD.generated.h"
 
 UCLASS()
-class ABSURDJUMP_API AAJ_GameModeBase : public AGameModeBase
+class ABSURDJUMP_API AAJ_GameHUD : public AHUD
 {
 	GENERATED_BODY()
 
 public:
-	AAJ_GameModeBase();
+	AAJ_GameHUD();
 	
 	virtual void BeginPlay() override;
 	

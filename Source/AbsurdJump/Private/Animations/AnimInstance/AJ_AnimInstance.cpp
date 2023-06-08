@@ -4,7 +4,8 @@
 #include "Animations/AnimInstance/AJ_AnimInstance.h"
 
 #include "Character/AJ_CharacterBase.h"
-#include "Components/MovementComponent/AJ_CharacterMovementComponent.h"
+#include "Components/CharacterComponents/MovementComponent/AJ_CharacterMovementComponent.h"
+
 
 UAJ_AnimInstance::UAJ_AnimInstance(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {

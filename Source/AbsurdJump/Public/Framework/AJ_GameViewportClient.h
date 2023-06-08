@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
-#include "AJ_MainHUD_WD.generated.h"
+#include "Engine/GameViewportClient.h"
+#include "AJ_GameViewportClient.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ABSURDJUMP_API UAJ_MainHUD_WD : public UUserWidget
+class ABSURDJUMP_API UAJ_GameViewportClient : public UGameViewportClient
 {
 	GENERATED_BODY()
 };

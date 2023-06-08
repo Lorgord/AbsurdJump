@@ -1,12 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Components/CharacterEquipmentComponent/AJ_CharacterEquipmentComponent.h"
+#include "Components/CharacterComponents/EquipmentComponent/AJ_CharacterEquipmentComponent.h"
 
-#include "Actors/Equipment/AJ_RangeWeapon.h"
-#include "Actors/Items/AJ_Projectile.h"
+#include "Components/CharacterComponents/MovementComponent/AJ_CharacterMovementComponent.h"
 #include "Character/AJ_CharacterBase.h"
-#include "Components/MovementComponent/AJ_CharacterMovementComponent.h"
+#include "Actors/Equipment/AJ_RangeWeapon.h"
 
 
 UAJ_CharacterEquipmentComponent::UAJ_CharacterEquipmentComponent()
