@@ -3,12 +3,19 @@
 
 #include "Character/Player/AJ_PlayerState.h"
 
-#include "Character/Player/AJ_PlayerCharacter.h"
+#include "Character/Attributes/AJ_CharacterAttributeSet.h"
+#include "Components/CharacterComponents/AbilitySystemComponent/AJ_AbilitySystemComponent.h"
 
 
 AAJ_PlayerState::AAJ_PlayerState()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	AbilitySystemComponent = CreateDefaultSubobject<UAJ_AbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	AbilitySystemComponent->SetIsReplicated(true);
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
+
+	AttributeSet = CreateDefaultSubobject<UAJ_CharacterAttributeSet>(TEXT("AttributeSet"));
+	
+	NetUpdateFrequency = 30.0f;
 }
 
 void AAJ_PlayerState::BeginPlay()

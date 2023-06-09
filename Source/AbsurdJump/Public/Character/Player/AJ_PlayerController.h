@@ -27,6 +27,7 @@ public:
 	UFUNCTION(BlueprintNativeEvent, Category = "PlayerController")
 	void OnGameStart(bool WasLoaded);
 	virtual void OnGameStart_Implementation(bool WasLoaded);
+	
 
 
 //Blueprint values

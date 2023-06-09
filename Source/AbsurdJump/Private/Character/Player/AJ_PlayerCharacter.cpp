@@ -4,10 +4,11 @@
 #include "AbsurdJump/Public/Character/Player/AJ_PlayerCharacter.h"
 
 #include "Camera/CameraComponent.h"
+#include "Character/Player/AJ_PlayerState.h"
+#include "Components/CharacterComponents/AbilitySystemComponent/AJ_AbilitySystemComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
 
-// Sets default values
 AAJ_PlayerCharacter::AAJ_PlayerCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -20,14 +21,11 @@ AAJ_PlayerCharacter::AAJ_PlayerCharacter(const FObjectInitializer& ObjectInitial
 	FollowCamera->bUsePawnControlRotation = false;
 }
 
-// Called when the game starts or when spawned
 void AAJ_PlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
-// Called every frame
 void AAJ_PlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

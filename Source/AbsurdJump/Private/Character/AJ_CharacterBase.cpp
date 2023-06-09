@@ -3,6 +3,8 @@
 
 #include "AbsurdJump/Public/Character/AJ_CharacterBase.h"
 
+#include "Character/Player/AJ_PlayerState.h"
+#include "Components/CharacterComponents/AbilitySystemComponent/AJ_AbilitySystemComponent.h"
 #include "Components/CharacterComponents/EquipmentComponent/AJ_CharacterEquipmentComponent.h"
 #include "Components/CharacterComponents/MovementComponent/AJ_CharacterMovementComponent.h"
 
@@ -11,8 +13,8 @@ AAJ_CharacterBase::AAJ_CharacterBase(const FObjectInitializer& ObjectInitializer
 : Super(ObjectInitializer.SetDefaultSubobjectClass<UAJ_CharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
 	MovementComponent = Cast<UAJ_CharacterMovementComponent>(GetCharacterMovement());
-	EquipmentComponent = CreateDefaultSubobject<UAJ_CharacterEquipmentComponent>(TEXT("EquipmentComponent"));
-
+	
+	AddDefaultComponent(EquipmentComponent, UAJ_CharacterEquipmentComponent, "EquipmentComponent", true) //move to GAS
 	
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -32,6 +34,39 @@ void AAJ_CharacterBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void AAJ_CharacterBase::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	InitPlayer();
+}
+
+void AAJ_CharacterBase::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+	InitPlayer();
+}
+
+void AAJ_CharacterBase::InitPlayer()
+{
+	
+	AAJ_PlayerState* PS = GetPlayerState<AAJ_PlayerState>();
+	if (PS)
+	{
+		AbilitySystemComponent = Cast<UAJ_AbilitySystemComponent>(PS->AbilitySystemComponent);
+		
+		PS->AbilitySystemComponent->InitAbilityActorInfo(PS, this);
+	}
+
+	if (HasAuthority() || IsLocallyControlled())
+	{
+		// Initializations
+	}
+}
+
+UAbilitySystemComponent* AAJ_CharacterBase::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
 
 
 void AAJ_CharacterBase::OnSlideStart_Implementation()

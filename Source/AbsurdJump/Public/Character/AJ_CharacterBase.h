@@ -5,10 +5,22 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/Character.h"
+#include "AbilitySystemInterface.h"
+#include "GameplayTagContainer.h"
+#include "Abilities/AbilityID.h"
 #include "AJ_CharacterBase.generated.h"
 
+
+class UGameplayEffect;
+class UAJ_AbilitySystemComponent;
 class UAJ_CharacterEquipmentComponent;
 class UAJ_CharacterMovementComponent;
+
+
+
+#define AddDefaultComponent(ComponentObject, ComponentName, DisplayName, Replicated)\
+ComponentObject = CreateDefaultSubobject<ComponentName>(TEXT(DisplayName));\
+ComponentObject->SetIsReplicated(Replicated);
 
 
 
@@ -16,7 +28,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnScoreUpdated);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerDeath);
 
 UCLASS()
-class ABSURDJUMP_API AAJ_CharacterBase : public ACharacter
+class ABSURDJUMP_API AAJ_CharacterBase : public ACharacter , public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -27,9 +39,37 @@ public:
 	
 	virtual void Tick(float DeltaTime) override;
 
+	
+
+	virtual void PossessedBy(AController* NewController) override;
+
+	virtual void OnRep_PlayerState() override;
+
+	
+	UFUNCTION()
+	void InitPlayer();
+
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	UFUNCTION()
+	int32 GetAbilityLevel(EAbilityID AbilityID) const { return 0; }
+
+	UFUNCTION()
+	void AddCharacterAttributes() { return;}
+
+	UFUNCTION()
+	void InitializeAttributes(){ return;}
+
+	UFUNCTION()
+	void AddStartupEffects(){ return;}
+	
+	
 
 
 
+
+	
+	
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Character | Slide")
 		void OnSlideStart();
@@ -81,7 +121,15 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Character | Score")
 		void AddScore(int Score);
 		virtual void AddScore_Implementation(int Score);
+	
 
+	UFUNCTION(BlueprintGetter, Category = "Character | Components")
+		UAJ_CharacterEquipmentComponent* GetEquipmentComponent() const { return EquipmentComponent; }
+	
+
+
+
+	
 	UPROPERTY(BlueprintAssignable, Category = "Character | Score")
 		FOnScoreUpdated OnScoreUpdated;
 
@@ -108,11 +156,28 @@ public:
 	
 
 
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Character | Name")
+	FText CharacterName;
+
+	UPROPERTY()
+	FGameplayTag DeadTag;
+
+	
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Character | Abilities")
+	TSubclassOf<UGameplayEffect> DefaultAttributes;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Character | Abilities")
+	TArray<TSubclassOf<UGameplayEffect>> StartupAttributes;
 	
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character | Components")
-	UAJ_CharacterMovementComponent* MovementComponent;
+	UAJ_CharacterMovementComponent* MovementComponent = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character | Components")
-	UAJ_CharacterEquipmentComponent* EquipmentComponent;
+	UAJ_CharacterEquipmentComponent* EquipmentComponent = nullptr; //move to GAS
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player | Components")
+	UAJ_AbilitySystemComponent* AbilitySystemComponent = nullptr;
+	
 };
