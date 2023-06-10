@@ -26,21 +26,5 @@ public:
 	virtual void NativeInitializeAnimation() override;
 
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
-
-
-
-	UPROPERTY(BlueprintReadOnly, Category = "AnimInstance")
-	bool bIsSliding = false;
-
-	UPROPERTY(BlueprintReadOnly, Category = "AnimInstance")
-	bool bIsLaunched = false;
-
-
-protected:
-
-	UPROPERTY(BlueprintReadOnly, Category = "AnimInstance")
-	AAJ_CharacterBase* CharacterBase = nullptr;
-
-	UPROPERTY(BlueprintReadOnly, Category = "AnimInstance")
-	UAJ_CharacterMovementComponent* MovementComponent = nullptr;
+	
 };

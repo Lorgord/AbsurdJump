@@ -1,50 +1,29 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+// Copyright 2023 Egor "Lorgord" Voronov
 
 #include "AbsurdJump/Public/Character/Player/AJ_PlayerController.h"
 
-#include "Character/Player/AJ_PlayerCharacter.h"
+#include "Blueprint/UserWidget.h"
+#include "Character/Player/AJ_PlayerState.h"
 #include "Framework/AJ_GameHUD.h"
 #include "Framework/AJ_GameInstance.h"
 #include "Framework/AJ_GameModeBase.h"
 
 
 
-void AAJ_PlayerController::BeginPlay()
-{
-	Super::BeginPlay();
 
-	GameHUD = Cast<AAJ_GameHUD>(GetHUD());
-	
-	UAJ_GameInstance* LGameInstance = Cast<UAJ_GameInstance>(GetGameInstance());
-
-	APawn* LPawn = GetPawn();
-
-	// if( IsValid(LPawn) && !LGameInstance->GetIsGameStarted() && LPawn->GetLocalRole() != ROLE_AutonomousProxy )
-	// {
-	// 	LPawn->DisableInput(this);
-	// }
-
-}
-
+// Server only
 void AAJ_PlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-	PlayerCharacter = Cast<AAJ_PlayerCharacter>(InPawn);
 
+	AAJ_PlayerState* PS = GetPlayerState<AAJ_PlayerState>();
+	if (PS)
+	{
+		PS->GetAbilitySystemComponent()->InitAbilityActorInfo(PS, InPawn);
+	}
 }
 
-void AAJ_PlayerController::OnGameStart_Implementation(bool WasLoaded)
+void AAJ_PlayerController::OnRep_PlayerState()
 {
-	if( IsValid(GameHUD) )
-	{
-		//GameHUD->CreateDeathWD();
-		//GameHUD->CreateMainHUD();
-	}
-
-	APawn* LPawn = GetPawn();
-	if( IsValid(LPawn) )
-	{
-		LPawn->EnableInput(this);
-	}
+	Super::OnRep_PlayerState();
 }

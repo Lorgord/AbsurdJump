@@ -1,41 +1,32 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+// Copyright 2023 Egor "Lorgord" Voronov
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "AJ_PlayerController.generated.h"
 
+class UAJ_MainHUD_WD;
 class AAJ_GameHUD;
-class AAJ_PlayerCharacter;
 
 UCLASS()
 class ABSURDJUMP_API AAJ_PlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
-public:
-
-	virtual void BeginPlay() override;
+protected:
 	
 	virtual void OnPossess(APawn* InPawn) override;
-
-
-	//Blueprint protected methods
-	protected:
-
-	UFUNCTION(BlueprintNativeEvent, Category = "PlayerController")
-	void OnGameStart(bool WasLoaded);
-	virtual void OnGameStart_Implementation(bool WasLoaded);
 	
+	virtual void OnRep_PlayerState() override;
 
 
-//Blueprint values
-public:
+
+protected:
 	
-	UPROPERTY(BlueprintReadOnly, Category = "PlayerController")
-		AAJ_GameHUD* GameHUD = nullptr;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "PlayerController | UI")
+	UAJ_MainHUD_WD* HUD_Wd;
 
-	UPROPERTY(BlueprintReadOnly, Category = "PlayerController")
-		AAJ_PlayerCharacter* PlayerCharacter = nullptr;
+
+	
+	
 };

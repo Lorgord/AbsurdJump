@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 2023 Egor "Lorgord" Voronov
 
 #pragma once
 
@@ -6,17 +6,14 @@
 #include "AbilitySystemComponent.h"
 #include "AJ_AbilitySystemComponent.generated.h"
 
-/**
- * 
- */
-UCLASS()
+
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class ABSURDJUMP_API UAJ_AbilitySystemComponent : public UAbilitySystemComponent
 {
 	GENERATED_BODY()
 
 public:
 
-	bool CharacterAbilitiesGiven = false;
-	bool StartupEffectApplied = false;
-	
+	bool bCharacterAbilitiesGiven = false;
+	bool bStartupEffectsApplied = false;
 };

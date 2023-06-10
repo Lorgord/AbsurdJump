@@ -1,32 +1,32 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 2023 Egor "Lorgord" Voronov
 
 
-#include "AbsurdJump/Public/Character/Player/AJ_PlayerCharacter.h"
-
-#include "Camera/CameraComponent.h"
-#include "Character/Player/AJ_PlayerState.h"
-#include "Components/CharacterComponents/AbilitySystemComponent/AJ_AbilitySystemComponent.h"
-#include "GameFramework/SpringArmComponent.h"
+#include "Character/Player/AJ_PlayerCharacter.h"
 
 
+// Sets default values
 AAJ_PlayerCharacter::AAJ_PlayerCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 400.0f; // The camera follows at this distance behind the character	
-	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
-
-	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-	FollowCamera->bUsePawnControlRotation = false;
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
 }
 
+// Called when the game starts or when spawned
 void AAJ_PlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
 }
 
+// Called every frame
 void AAJ_PlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
+
+// Called to bind functionality to input
+void AAJ_PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+

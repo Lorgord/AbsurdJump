@@ -1,31 +1,30 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 2023 Egor "Lorgord" Voronov
 
 
-#include "AbsurdJump/Public/Character/AJ_CharacterBase.h"
+#include "Character/AJ_CharacterBase.h"
 
-#include "Character/Player/AJ_PlayerState.h"
-#include "Components/CharacterComponents/AbilitySystemComponent/AJ_AbilitySystemComponent.h"
-#include "Components/CharacterComponents/EquipmentComponent/AJ_CharacterEquipmentComponent.h"
-#include "Components/CharacterComponents/MovementComponent/AJ_CharacterMovementComponent.h"
+#include "Character/Components/MovementComponent/AJ_CharacterMovementComponent.h"
+#include "Character/GameplayAbilitySystem/AJ_AbilitySystemComponent.h"
+#include "Character/GameplayAbilitySystem/Abilities/AJ_GameplayAbilityBase.h"
+#include "Character/GameplayAbilitySystem/AttributeSets/AJ_AttributeSetBase.h"
+#include "Components/CapsuleComponent.h"
 
 
-AAJ_CharacterBase::AAJ_CharacterBase(const FObjectInitializer& ObjectInitializer)
-: Super(ObjectInitializer.SetDefaultSubobjectClass<UAJ_CharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
+AAJ_CharacterBase::AAJ_CharacterBase(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UAJ_CharacterMovementComponent>(CharacterMovementComponentName))
 {
-	MovementComponent = Cast<UAJ_CharacterMovementComponent>(GetCharacterMovement());
-	
-	AddDefaultComponent(EquipmentComponent, UAJ_CharacterEquipmentComponent, "EquipmentComponent", true) //move to GAS
-	
-	bUseControllerRotationPitch = false;
-	bUseControllerRotationYaw = false;
-	bUseControllerRotationRoll = false;
+	PrimaryActorTick.bCanEverTick = true;
+
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Overlap);
+
+	bAlwaysRelevant = true;
+
+	DeadTag = FGameplayTag::RequestGameplayTag(FName("State.Dead"));
+	EffectRemoveOnDeathTag = FGameplayTag::RequestGameplayTag(FName("Effect.RemoveOnDeath"));
 }
 
 void AAJ_CharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	OnActorHit.AddDynamic(this, &AAJ_CharacterBase::OnActorHitEvent);
 	
 }
 
@@ -34,106 +33,190 @@ void AAJ_CharacterBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AAJ_CharacterBase::PossessedBy(AController* NewController)
+void AAJ_CharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	Super::PossessedBy(NewController);
-	InitPlayer();
-}
-
-void AAJ_CharacterBase::OnRep_PlayerState()
-{
-	Super::OnRep_PlayerState();
-	InitPlayer();
-}
-
-void AAJ_CharacterBase::InitPlayer()
-{
-	
-	AAJ_PlayerState* PS = GetPlayerState<AAJ_PlayerState>();
-	if (PS)
-	{
-		AbilitySystemComponent = Cast<UAJ_AbilitySystemComponent>(PS->AbilitySystemComponent);
-		
-		PS->AbilitySystemComponent->InitAbilityActorInfo(PS, this);
-	}
-
-	if (HasAuthority() || IsLocallyControlled())
-	{
-		// Initializations
-	}
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
 UAbilitySystemComponent* AAJ_CharacterBase::GetAbilitySystemComponent() const
 {
-	return AbilitySystemComponent;
+	return AbilitySystemComponent.Get();
 }
 
-
-void AAJ_CharacterBase::OnSlideStart_Implementation()
+void AAJ_CharacterBase::AddCharacterAbilities()
 {
-	MovementComponent->BeginSlide();
-}
-
-void AAJ_CharacterBase::OnSlideEnd_Implementation()
-{
-	MovementComponent->EndSlide();
-
-	LaunchCharacter(LaunchVector, false, false);
-}
-
-void AAJ_CharacterBase::Boost_Implementation()
-{
-	if (!CanBoost())
-	{
-		return;
-	}
-	
-	LaunchCharacter(BoostVector, false, false);
-}
-
-bool AAJ_CharacterBase::CanBoost()
-{
-	return MovementComponent->bIsLaunched;
-}
-
-void AAJ_CharacterBase::Fire_Implementation()
-{
-	EquipmentComponent->Fire();
-}
-
-
-void AAJ_CharacterBase::OnActorHitEvent(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
-{
-	if (!MovementComponent->bIsLaunched || MovementComponent->bWantToSlide)
+	// Grant abilities, but only on the server	
+	if (GetLocalRole() != ROLE_Authority || !AbilitySystemComponent.IsValid() || AbilitySystemComponent->bCharacterAbilitiesGiven)
 	{
 		return;
 	}
 
-	KillPlayer();
+	for (TSubclassOf<UAJ_GameplayAbilityBase>& StartupAbility : CharacterAbilities)
+	{
+		// AbilitySystemComponent->GiveAbility(
+		// 	FGameplayAbilitySpec(StartupAbility, 1, StartupAbility.GetDefaultObject()->AbilityID));
+	}
+
+	AbilitySystemComponent->bCharacterAbilitiesGiven = true;
 }
 
-void AAJ_CharacterBase::KillPlayer_Implementation()
+void AAJ_CharacterBase::RemoveCharacterAbilities()
 {
-	MovementComponent->OnDeath();
-	EnableRagdoll();
-	bIsDead = true;
-	OnPlayerDeath.Broadcast();
+	if (GetLocalRole() != ROLE_Authority || !AbilitySystemComponent.IsValid() || !AbilitySystemComponent->bCharacterAbilitiesGiven)
+	{
+		return;
+	}
+
+	// Remove any abilities added from a previous call. This checks to make sure the ability is in the startup 'CharacterAbilities' array.
+	TArray<FGameplayAbilitySpecHandle> AbilitiesToRemove;
+	for (const FGameplayAbilitySpec& Spec : AbilitySystemComponent->GetActivatableAbilities())
+	{
+		if ((Spec.SourceObject == this) && CharacterAbilities.Contains(Spec.Ability->GetClass()))
+		{
+			AbilitiesToRemove.Add(Spec.Handle);
+		}
+	}
+
+	// Do in two passes so the removal happens after we have the full list
+	for (int32 i = 0; i < AbilitiesToRemove.Num(); i++)
+	{
+		AbilitySystemComponent->ClearAbility(AbilitiesToRemove[i]);
+	}
+
+	AbilitySystemComponent->bCharacterAbilitiesGiven = false;
 }
 
-bool AAJ_CharacterBase::IsDead()
+void AAJ_CharacterBase::InitializeAttributes()
 {
-	return bIsDead;
+	if (!AbilitySystemComponent.IsValid())
+	{
+		return;
+	}
+
+	if (!DefaultAttributes)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s() Missing DefaultAttributes for %s. Please fill in the character's Blueprint."), *FString(__FUNCTION__), *GetName());
+		return;
+	}
+
+	// Can run on Server and Client
+	FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+	EffectContext.AddSourceObject(this);
+
+	FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(DefaultAttributes, 1.0f, EffectContext);
+	if (NewHandle.IsValid())
+	{
+		FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*NewHandle.Data.Get(), AbilitySystemComponent.Get());
+	}
 }
 
-void AAJ_CharacterBase::EnableRagdoll()
+void AAJ_CharacterBase::AddStartupEffects()
 {
-	GetMesh()->SetCollisionProfileName(FName("Ragdoll"));
-	GetMesh()->SetSimulatePhysics(true);
+	if (GetLocalRole() != ROLE_Authority || !AbilitySystemComponent.IsValid() || AbilitySystemComponent->bStartupEffectsApplied)
+	{
+		return;
+	}
+
+	FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+	EffectContext.AddSourceObject(this);
+
+	for (TSubclassOf<UGameplayEffect> GameplayEffect : StartupEffects)
+	{
+		FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffect, 1.0f, EffectContext);
+		if (NewHandle.IsValid())
+		{
+			FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*NewHandle.Data.Get(), AbilitySystemComponent.Get());
+		}
+	}
+
+	AbilitySystemComponent->bStartupEffectsApplied = true;
 }
 
-void AAJ_CharacterBase::AddScore_Implementation(int Score)
+bool AAJ_CharacterBase::IsAlive() const
 {
-	CurrentScore += Score;
-	
-	OnScoreUpdated.Broadcast();
+	return !bIsPlayerFall;
 }
+
+void AAJ_CharacterBase::Die()
+{
+	// Only runs on Server
+	RemoveCharacterAbilities();
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCharacterMovement()->GravityScale = 0;
+	GetCharacterMovement()->Velocity = FVector(0);
+
+	OnCharacterDied.Broadcast(this);
+
+	if (AbilitySystemComponent.IsValid())
+	{
+		AbilitySystemComponent->CancelAllAbilities();
+
+		FGameplayTagContainer EffectTagsToRemove;
+		EffectTagsToRemove.AddTag(EffectRemoveOnDeathTag);
+		int32 NumEffectsRemoved = AbilitySystemComponent->RemoveActiveEffectsWithTags(EffectTagsToRemove);
+
+		AbilitySystemComponent->AddLooseGameplayTag(DeadTag);
+	}
+}
+
+float AAJ_CharacterBase::GetFuel() const
+{
+	if (AttributeSetBase.IsValid())
+	{
+		return AttributeSetBase->GetFuel();
+	}
+
+	return 0.0f;
+}
+
+float AAJ_CharacterBase::GetMaxFuel() const
+{
+	if (AttributeSetBase.IsValid())
+	{
+		return AttributeSetBase->GetMaxFuel();
+	}
+
+	return 0.0f;
+}
+
+float AAJ_CharacterBase::GetSpeed() const
+{
+	if (AttributeSetBase.IsValid())
+	{
+		return AttributeSetBase->GetSpeed();
+	}
+
+	return 0.0f;
+}
+
+float AAJ_CharacterBase::GetMaxSpeed() const
+{
+	if (AttributeSetBase.IsValid())
+	{
+		return AttributeSetBase->GetMaxSpeed();
+	}
+
+	return 0.0f;
+}
+
+float AAJ_CharacterBase::GetMobility() const
+{
+	if (AttributeSetBase.IsValid())
+	{
+		return AttributeSetBase->GetMobility();
+	}
+
+	return 0.0f;
+}
+
+float AAJ_CharacterBase::GetMaxMobility() const
+{
+	if (AttributeSetBase.IsValid())
+	{
+		return AttributeSetBase->GetMaxMobility();
+	}
+
+	return 0.0f;
+}
+
