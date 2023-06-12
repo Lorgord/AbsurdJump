@@ -33,10 +33,7 @@ void AAJ_CharacterBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AAJ_CharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-}
+
 
 UAbilitySystemComponent* AAJ_CharacterBase::GetAbilitySystemComponent() const
 {
@@ -53,8 +50,7 @@ void AAJ_CharacterBase::AddCharacterAbilities()
 
 	for (TSubclassOf<UAJ_GameplayAbilityBase>& StartupAbility : CharacterAbilities)
 	{
-		// AbilitySystemComponent->GiveAbility(
-		// 	FGameplayAbilitySpec(StartupAbility, 1, StartupAbility.GetDefaultObject()->AbilityID));
+		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(StartupAbility, 1, static_cast<int32>(StartupAbility.GetDefaultObject()->AbilityInputID), this));
 	}
 
 	AbilitySystemComponent->bCharacterAbilitiesGiven = true;

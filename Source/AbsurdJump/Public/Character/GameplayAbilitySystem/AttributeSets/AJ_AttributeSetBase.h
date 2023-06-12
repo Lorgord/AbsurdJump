@@ -24,15 +24,10 @@ public:
 
 	UAJ_AttributeSetBase();
 
-	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
-	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
-
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
-
-	void AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute, const FGameplayAttributeData& MaxAttribute, float NewMaxValue, const FGameplayAttribute& AffectedAttributeProperty);
-
+	
 	UFUNCTION()
 	virtual void OnRep_Fuel(const FGameplayAttributeData& OldFuel);
 
@@ -44,6 +39,9 @@ protected:
 
 	UFUNCTION()
 	virtual void OnRep_MaxSpeed(const FGameplayAttributeData& OldMaxSpeed);
+
+	UFUNCTION()
+	virtual void OnRep_SpeedRegenRate(const FGameplayAttributeData& OldSpeedRegenRate);
 
 	UFUNCTION()
 	virtual void OnRep_Boost(const FGameplayAttributeData& OldBoost);
@@ -74,6 +72,10 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Speed", ReplicatedUsing = OnRep_MaxSpeed)
 	FGameplayAttributeData MaxSpeed;
 	ATTRIBUTE_ACCESSORS(UAJ_AttributeSetBase, MaxSpeed)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Speed", ReplicatedUsing = OnRep_SpeedRegenRate)
+	FGameplayAttributeData SpeedRegenRate;
+	ATTRIBUTE_ACCESSORS(UAJ_AttributeSetBase, SpeedRegenRate)
 
 	UPROPERTY(BlueprintReadOnly, Category = "Boost", ReplicatedUsing = OnRep_Boost)
 	FGameplayAttributeData Boost;

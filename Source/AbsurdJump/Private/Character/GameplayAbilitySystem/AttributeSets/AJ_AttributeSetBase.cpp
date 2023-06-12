@@ -11,29 +11,6 @@ UAJ_AttributeSetBase::UAJ_AttributeSetBase()
 {
 }
 
-void UAJ_AttributeSetBase::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
-{
-	Super::PreAttributeChange(Attribute, NewValue);
-
-	if (Attribute == GetMaxFuelAttribute())
-	{
-		AdjustAttributeForMaxChange(Fuel, MaxFuel, NewValue, GetFuelAttribute());
-	}
-	else if (Attribute == GetMaxSpeedAttribute())
-	{
-		AdjustAttributeForMaxChange(Speed, MaxSpeed, NewValue, GetSpeedAttribute());
-	}
-	else if (Attribute == GetMaxMobilityAttribute())
-	{
-		AdjustAttributeForMaxChange(Mobility, MaxMobility, NewValue, GetMobilityAttribute());
-	}
-}
-
-void UAJ_AttributeSetBase::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
-{
-	Super::PostGameplayEffectExecute(Data);
-}
-
 void UAJ_AttributeSetBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -42,6 +19,7 @@ void UAJ_AttributeSetBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 	DOREPLIFETIME_CONDITION_NOTIFY(UAJ_AttributeSetBase, MaxFuel, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAJ_AttributeSetBase, Speed, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAJ_AttributeSetBase, MaxSpeed, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAJ_AttributeSetBase, SpeedRegenRate, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAJ_AttributeSetBase, Boost, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAJ_AttributeSetBase, BoostRegenRate, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAJ_AttributeSetBase, Mobility, COND_None, REPNOTIFY_Always);
@@ -49,20 +27,6 @@ void UAJ_AttributeSetBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 
 	
 
-}
-
-void UAJ_AttributeSetBase::AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute, const FGameplayAttributeData& MaxAttribute, float NewMaxValue, const FGameplayAttribute& AffectedAttributeProperty)
-{
-	UAbilitySystemComponent* AbilityComp = GetOwningAbilitySystemComponent();
-	const float CurrentMaxValue = MaxAttribute.GetCurrentValue();
-	if (!FMath::IsNearlyEqual(CurrentMaxValue, NewMaxValue) && AbilityComp)
-	{
-		// Change current value to maintain the current Val / Max percent
-		const float CurrentValue = AffectedAttribute.GetCurrentValue();
-		float NewDelta = (CurrentMaxValue > 0.f) ? (CurrentValue * NewMaxValue / CurrentMaxValue) - CurrentValue : NewMaxValue;
-
-		AbilityComp->ApplyModToAttributeUnsafe(AffectedAttributeProperty, EGameplayModOp::Additive, NewDelta);
-	}
 }
 
 void UAJ_AttributeSetBase::OnRep_Fuel(const FGameplayAttributeData& OldFuel)
@@ -83,6 +47,11 @@ void UAJ_AttributeSetBase::OnRep_Speed(const FGameplayAttributeData& OldSpeed)
 void UAJ_AttributeSetBase::OnRep_MaxSpeed(const FGameplayAttributeData& OldMaxSpeed)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UAJ_AttributeSetBase, MaxSpeed, OldMaxSpeed);
+}
+
+void UAJ_AttributeSetBase::OnRep_SpeedRegenRate(const FGameplayAttributeData& OldSpeedRegenRate)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAJ_AttributeSetBase, SpeedRegenRate, OldSpeedRegenRate);
 }
 
 void UAJ_AttributeSetBase::OnRep_Boost(const FGameplayAttributeData& OldBoost)

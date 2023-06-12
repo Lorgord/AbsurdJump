@@ -1,0 +1,4 @@
+[/Script/GameplayTags.GameplayTagsList]
+GameplayTagList=(Tag="GameplayCue.State",DevComment="")
+GameplayTagList=(Tag="State",DevComment="")
+

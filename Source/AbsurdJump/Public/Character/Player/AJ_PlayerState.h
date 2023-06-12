@@ -38,6 +38,7 @@ public:
 	virtual void MaxFuelChanged(const FOnAttributeChangeData& Data);
 	virtual void SpeedChanged(const FOnAttributeChangeData& Data);
 	virtual void MaxSpeedChanged(const FOnAttributeChangeData& Data);
+	virtual void SpeedRegenRateChanged(const FOnAttributeChangeData& Data);
 	virtual void BoostChanged(const FOnAttributeChangeData& Data);
 	virtual void BoostRegenRateChanged(const FOnAttributeChangeData& Data);
 	virtual void MobilityChanged(const FOnAttributeChangeData& Data);
@@ -66,6 +67,9 @@ public:
 	float GetMaxSpeed() const;
 
 	UFUNCTION(BlueprintCallable, Category = "PlayerState | Attributes")
+	float GetSpeedRegenRate() const;
+
+	UFUNCTION(BlueprintCallable, Category = "PlayerState | Attributes")
 	float GetBoost() const;
 
 	UFUNCTION(BlueprintCallable, Category = "PlayerState | Attributes")
@@ -90,6 +94,7 @@ protected:
 	FDelegateHandle FuelChangedDelegateHandle;
 	FDelegateHandle MaxFuelChangedDelegateHandle;
 	FDelegateHandle SpeedChangedDelegateHandle;
+	FDelegateHandle SpeedRegenRateChangedDelegateHandle;
 	FDelegateHandle MaxSpeedChangedDelegateHandle;
 	FDelegateHandle BoostChangedDelegateHandle;
 	FDelegateHandle BoostRegenRateChangedDelegateHandle;

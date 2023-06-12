@@ -98,6 +98,11 @@ void AAJ_PlayerState::MaxSpeedChanged(const FOnAttributeChangeData& Data)
 {
 }
 
+void AAJ_PlayerState::SpeedRegenRateChanged(const FOnAttributeChangeData& Data)
+{
+}
+
+
 void AAJ_PlayerState::BoostChanged(const FOnAttributeChangeData& Data)
 {
 }
@@ -151,6 +156,11 @@ float AAJ_PlayerState::GetSpeed() const
 float AAJ_PlayerState::GetMaxSpeed() const
 {
 	return AttributeSetBase->GetMaxSpeed();
+}
+
+float AAJ_PlayerState::GetSpeedRegenRate() const
+{
+	return AttributeSetBase->GetSpeedRegenRate();
 }
 
 float AAJ_PlayerState::GetBoost() const
