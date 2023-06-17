@@ -7,21 +7,25 @@
 #include "AJ_CharacterMovementComponent.generated.h"
 
 
+class AAJ_CharacterBase;
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class ABSURDJUMP_API UAJ_CharacterMovementComponent : public UCharacterMovementComponent
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this component's properties
 	UAJ_CharacterMovementComponent();
 
-protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	UFUNCTION()
+	void MoveCharacterForward(float DeltaTime);
+
+protected:
+
+	UPROPERTY()
+	AAJ_CharacterBase* CharacterBase;
 };
