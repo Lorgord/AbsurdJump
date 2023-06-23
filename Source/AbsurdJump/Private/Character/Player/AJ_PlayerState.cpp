@@ -18,6 +18,8 @@ AAJ_PlayerState::AAJ_PlayerState()
 
 	AttributeSetBase = CreateDefaultSubobject<UAJ_AttributeSetBase>(TEXT("AttributeSetBase"));
 
+	NetUpdateFrequency = 100.0f;
+
 	DeadTag = FGameplayTag::RequestGameplayTag(FName("State.Dead"));
 }
 

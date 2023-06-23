@@ -150,10 +150,11 @@ void AAJ_PlayerCharacter::Move(const FInputActionValue& Value)
 	if (Controller && Value.IsNonZero())
 	{
 		FVector2D MovementVector = Value.Get<FVector2D>();
-		FVector Up = GetActorUpVector();
+		
+		FVector Forward = GetActorForwardVector();
 		FVector Right = GetActorRightVector();
 		
-		AddMovementInput(Up, MovementVector.Y);
+		AddMovementInput(Forward, MovementVector.Y);
 		AddMovementInput(Right, MovementVector.X);
 	}
 }
