@@ -8,6 +8,7 @@
 #include "Character/AJ_CharacterBase.h"
 #include "AJ_PlayerCharacter.generated.h"
 
+class AAJ_PlayerState;
 class USpringArmComponent;
 class UCameraComponent;
 
@@ -31,6 +32,8 @@ public:
 	virtual void PossessedBy(AController* NewController) override;
 	
 	virtual void OnRep_PlayerState() override;
+
+	void InitializeGAS();
 	
 	
 	USpringArmComponent* GetCameraBoom();
@@ -39,45 +42,60 @@ public:
 	
 
 	void BindASCInput();
+	
+	void MoveForward(const FInputActionValue& InValue);
+	void MoveForwardStarted(const FInputActionValue& InValue);
+	void MoveForwardCompleted(const FInputActionValue& InValue);
+	
+	void MoveRight(const FInputActionValue& InValue);
 
-	void Move(const FInputActionValue& Value);
+	void Look(const FInputActionValue& InValue);
 
-	void Look(const FInputActionValue& Value);
+	UFUNCTION(BlueprintCallable, Category = "Player | Speed")
+	virtual void UpdateThrottle(float DeltaTime);
 
+	UFUNCTION(BlueprintCallable, Category = "Player | Speed")
+	virtual void UpdateSpeed();
 	
 protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category = "Player | Input")
-	UInputMappingContext* MappingContext;
+	UInputMappingContext* MappingContext = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category = "Player | Input")
-	UInputAction* MoveAction;
+	UInputAction* ForwardAction = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category = "Player | Input")
-	UInputAction* LookAction;
-	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Player |Camera")
-	float BaseTurnRate = 45.0f;
+	UInputAction* BackwardAction = nullptr;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Player |Camera")
-	float BaseLookUpRate = 45.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category = "Player | Input")
+	UInputAction* RightAction = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category = "Player | Input")
+	UInputAction* LookAction = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player | Input")
+	float SlowDownSpeed = 0.5f;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Player |Camera")
-	float StartingCameraBoomArmLength;
+	float StartingCameraBoomArmLength = 0.0f;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Player |Camera")
 	FVector StartingCameraBoomLocation;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Player | Components")
-	USpringArmComponent* CameraBoom;
+	
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Player | Components")
-	UCameraComponent* FollowCamera;
+	USpringArmComponent* CameraBoom = nullptr;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Player | Components")
-	UEnhancedInputComponent* EnhancedInputComponent;
+	UCameraComponent* FollowCamera = nullptr;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Player | Components")
+	UEnhancedInputComponent* EnhancedInputComponent = nullptr;
 
 private:
 
 	bool bASCInputBound = false;
+	bool bIsForwardInputReleased = false;
 };

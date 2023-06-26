@@ -10,14 +10,19 @@
 #include "Components/CapsuleComponent.h"
 
 
-AAJ_CharacterBase::AAJ_CharacterBase(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UAJ_CharacterMovementComponent>(CharacterMovementComponentName))
+AAJ_CharacterBase::AAJ_CharacterBase(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer.SetDefaultSubobjectClass<UAJ_CharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
+	CharacterMovementComponent = StaticCast<UAJ_CharacterMovementComponent*>(GetCharacterMovement());
+	
 	PrimaryActorTick.bCanEverTick = true;
 
+	
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Overlap);
 
 	bAlwaysRelevant = true;
 
+	InputReleased = FGameplayTag::RequestGameplayTag(FName("State.InputReleased"));
 	DeadTag = FGameplayTag::RequestGameplayTag(FName("State.Dead"));
 	EffectRemoveOnDeathTag = FGameplayTag::RequestGameplayTag(FName("Effect.RemoveOnDeath"));
 }
@@ -156,26 +161,6 @@ void AAJ_CharacterBase::Die()
 	}
 }
 
-float AAJ_CharacterBase::GetFuel() const
-{
-	if (AttributeSetBase.IsValid())
-	{
-		return AttributeSetBase->GetFuel();
-	}
-
-	return 0.0f;
-}
-
-float AAJ_CharacterBase::GetMaxFuel() const
-{
-	if (AttributeSetBase.IsValid())
-	{
-		return AttributeSetBase->GetMaxFuel();
-	}
-
-	return 0.0f;
-}
-
 float AAJ_CharacterBase::GetSpeed() const
 {
 	if (AttributeSetBase.IsValid())
@@ -216,3 +201,40 @@ float AAJ_CharacterBase::GetMaxMobility() const
 	return 0.0f;
 }
 
+float AAJ_CharacterBase::GetThrottle() const
+{
+	if (AttributeSetBase.IsValid())
+	{
+		return AttributeSetBase->GetThrottle();
+	}
+
+	return 0.0f;
+}
+
+void AAJ_CharacterBase::SetThrottle(float Value) const
+{
+	if (AttributeSetBase.IsValid())
+	{
+		AttributeSetBase->SetThrottle(Value);
+	}
+}
+
+float AAJ_CharacterBase::GetMaxThrottle() const
+{
+	if (AttributeSetBase.IsValid())
+	{
+		return AttributeSetBase->GetMaxThrottle();
+	}
+
+	return 0.0f;
+}
+
+float AAJ_CharacterBase::GetMinThrottle() const
+{
+	if (AttributeSetBase.IsValid())
+	{
+		return AttributeSetBase->GetMinThrottle();
+	}
+
+	return 0.0f;
+}

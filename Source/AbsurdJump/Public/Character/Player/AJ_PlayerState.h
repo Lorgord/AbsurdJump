@@ -10,6 +10,7 @@
 #include "AJ_PlayerState.generated.h"
 
 
+class AAJ_PlayerCharacter;
 class UAJ_AbilitySystemComponent;
 class UAJ_AttributeSetBase;
 
@@ -32,10 +33,7 @@ public:
 
 	UAJ_AttributeSetBase* GetAttributeSetBase() const;
 
-
-
-	virtual void FuelChanged(const FOnAttributeChangeData& Data);
-	virtual void MaxFuelChanged(const FOnAttributeChangeData& Data);
+	
 	virtual void SpeedChanged(const FOnAttributeChangeData& Data);
 	virtual void MaxSpeedChanged(const FOnAttributeChangeData& Data);
 	virtual void SpeedRegenRateChanged(const FOnAttributeChangeData& Data);
@@ -51,14 +49,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "PlayerState | UI")
 	void ShowAbilityConfirmCancelText(bool ShowText);
-
-
-
-	UFUNCTION(BlueprintCallable, Category = "PlayerState | Attributes")
-	float GetFuel() const;
-
-	UFUNCTION(BlueprintCallable, Category = "PlayerState | Attributes")
-	float GetMaxFuel() const;
+	
 
 	UFUNCTION(BlueprintCallable, Category = "PlayerState | Attributes")
 	float GetSpeed() const;
@@ -83,6 +74,9 @@ public:
 
 protected:
 
+	UPROPERTY()
+	AAJ_PlayerCharacter* PlayerCharacter;
+	
 	UPROPERTY()
 	UAJ_AbilitySystemComponent* AbilitySystemComponent;
 

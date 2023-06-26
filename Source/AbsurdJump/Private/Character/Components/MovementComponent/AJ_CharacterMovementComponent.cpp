@@ -3,34 +3,55 @@
 
 #include "Character/Components/MovementComponent/AJ_CharacterMovementComponent.h"
 
+#include "Character/Player/AJ_PlayerCharacter.h"
 
-// Sets default values for this component's properties
+
 UAJ_CharacterMovementComponent::UAJ_CharacterMovementComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
 }
 
-
-// Called when the game starts
 void UAJ_CharacterMovementComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
-	
 }
 
+void UAJ_CharacterMovementComponent::OnRegister()
+{
+	Super::OnRegister();
+	PlayerCharacter = Cast<AAJ_PlayerCharacter>(GetCharacterOwner());
+	//UpdateSpeed();
+}
 
-// Called every frame
-void UAJ_CharacterMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-                                                   FActorComponentTickFunction* ThisTickFunction)
+void UAJ_CharacterMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	ForwardMovement(DeltaTime);
 }
 
+void UAJ_CharacterMovementComponent::RotatePlayer(float Value)
+{
+	//float YawScale = Value * ForwardInputScale
+	FRotator YawRotation = FRotator(0.0f, Value * RotateOnRate, 0.0f);
+
+	GetOwner()->AddActorLocalRotation(YawRotation);
+	
+	if (!GetOwner()->HasAuthority())
+	{
+		Server_RotatePlayer(GetOwner()->GetActorRotation());
+	}
+}
+
+void UAJ_CharacterMovementComponent::Server_RotatePlayer_Implementation(FRotator ActorRotation)
+{
+	GetOwner()->SetActorRotation(ActorRotation);
+}
+
+void UAJ_CharacterMovementComponent::ForwardMovement(float DeltaTime)
+{
+	ForwardInputScale = PlayerCharacter->GetThrottle() * 0.01f;
+	
+	GetPawnOwner()->AddMovementInput(GetOwner()->GetActorForwardVector(), ForwardInputScale);
+	GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Green, FString::Printf(TEXT("Current Throttle: %f\nCurrent Speed: %f"), PlayerCharacter->GetThrottle(), Velocity.Length()));
+}

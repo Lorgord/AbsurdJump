@@ -9,23 +9,23 @@ UENUM(BlueprintType)
 enum class EAbilityInputID : uint8
 {
 	// 0 None
-	None			UMETA(DisplayName = "None"),
+	None				UMETA(DisplayName = "None"),
 	// 1 Confirm
-	Confirm			UMETA(DisplayName = "Confirm"),
+	IA_Confirm			UMETA(DisplayName = "Confirm"),
 	// 2 Cancel
-	Cancel			UMETA(DisplayName = "Cancel"),
+	IA_Cancel			UMETA(DisplayName = "Cancel"),
 	// 3 LMB
-	Ability1		UMETA(DisplayName = "Ability1"),
+	IA_Ability1			UMETA(DisplayName = "Ability1"),
 	// 4 RMB
-	Ability2		UMETA(DisplayName = "Ability2"),
+	IA_Ability2			UMETA(DisplayName = "Ability2"),
 	// 5 Q
-	Ability3		UMETA(DisplayName = "Ability3"),
+	IA_Ability3			UMETA(DisplayName = "Ability3"),
 	// 6 E
-	Ability4		UMETA(DisplayName = "Ability4"),
+	IA_Ability4			UMETA(DisplayName = "Ability4"),
 	// 7 R
-	Ability5		UMETA(DisplayName = "Ability5"),
+	IA_Ability5			UMETA(DisplayName = "Ability5"),
 	// 8 Sprint
-	Sprint			UMETA(DisplayName = "Sprint"),
+	IA_Sprint			UMETA(DisplayName = "Boost"),
 	// 9 Jump
-	Jump			UMETA(DisplayName = "Jump")
+	IA_Jump				UMETA(DisplayName = "Jump")
 };

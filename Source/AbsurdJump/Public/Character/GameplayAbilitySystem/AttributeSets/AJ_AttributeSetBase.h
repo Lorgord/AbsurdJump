@@ -27,12 +27,6 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
-	
-	UFUNCTION()
-	virtual void OnRep_Fuel(const FGameplayAttributeData& OldFuel);
-
-	UFUNCTION()
-	virtual void OnRep_MaxFuel(const FGameplayAttributeData& OldMaxFuel);
 
 	UFUNCTION()
 	virtual void OnRep_Speed(const FGameplayAttributeData& OldSpeed);
@@ -55,15 +49,16 @@ protected:
 	UFUNCTION()
 	virtual void OnRep_MaxMobility(const FGameplayAttributeData& OldMaxMobility);
 
+	UFUNCTION()
+	virtual void OnRep_Throttle(const FGameplayAttributeData& OldThrottle);
+
+	UFUNCTION()
+	virtual void OnRep_MaxThrottle(const FGameplayAttributeData& OldMaxThrottle);
+
+	UFUNCTION()
+	virtual void OnRep_MinThrottle(const FGameplayAttributeData& OldMinThrottle);
+
 public:
-
-	UPROPERTY(BlueprintReadOnly, Category = "Fuel", ReplicatedUsing = OnRep_Fuel)
-	FGameplayAttributeData Fuel;
-	ATTRIBUTE_ACCESSORS(UAJ_AttributeSetBase, Fuel)
-
-	UPROPERTY(BlueprintReadOnly, Category = "Fuel", ReplicatedUsing = OnRep_MaxFuel)
-	FGameplayAttributeData MaxFuel;
-	ATTRIBUTE_ACCESSORS(UAJ_AttributeSetBase, MaxFuel)
 
 	UPROPERTY(BlueprintReadOnly, Category = "Speed", ReplicatedUsing = OnRep_Speed)
 	FGameplayAttributeData Speed;
@@ -92,4 +87,16 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Mobility", ReplicatedUsing = OnRep_MaxMobility)
 	FGameplayAttributeData MaxMobility;
 	ATTRIBUTE_ACCESSORS(UAJ_AttributeSetBase, MaxMobility)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Throttle", ReplicatedUsing = OnRep_Throttle)
+	FGameplayAttributeData Throttle;
+	ATTRIBUTE_ACCESSORS(UAJ_AttributeSetBase, Throttle)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Throttle", ReplicatedUsing = OnRep_MaxThrottle)
+	FGameplayAttributeData MaxThrottle;
+	ATTRIBUTE_ACCESSORS(UAJ_AttributeSetBase, MaxThrottle)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Throttle", ReplicatedUsing = OnRep_MinThrottle)
+	FGameplayAttributeData MinThrottle;
+	ATTRIBUTE_ACCESSORS(UAJ_AttributeSetBase, MinThrottle)
 };

@@ -10,6 +10,7 @@
 #include "AJ_CharacterBase.generated.h"
 
 
+class UAJ_CharacterMovementComponent;
 class UAJ_GameplayAbilityBase;
 class UAJ_AttributeSetBase;
 class UAJ_AbilitySystemComponent;
@@ -38,6 +39,8 @@ public:
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
+	UAJ_CharacterMovementComponent* GetCharacterMovementComponent() const { return CharacterMovementComponent; }
+
 	virtual void AddCharacterAbilities();
 
 	virtual void RemoveCharacterAbilities();
@@ -51,14 +54,7 @@ public:
 
 	virtual void Die();
 
-
 	
-
-	UFUNCTION(BlueprintCallable, Category = "Character | Attributes")
-	float GetFuel() const;
-
-	UFUNCTION(BlueprintCallable, Category = "Character | Attributes")
-	float GetMaxFuel() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Character | Attributes")
 	float GetSpeed() const;
@@ -72,6 +68,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Character | Attributes")
 	float GetMaxMobility() const;
 
+	UFUNCTION(BlueprintCallable, Category = "Character | Attributes")
+	float GetThrottle() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Character | Attributes")
+	void SetThrottle(float Value) const;
+
+	UFUNCTION(BlueprintCallable, Category = "Character | Attributes")
+	float GetMaxThrottle() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Character | Attributes")
+	float GetMinThrottle() const;
+
 
 	UPROPERTY(BlueprintAssignable, Category = "Character | Events")
 	FOnCharacterDiedEvent OnCharacterDied;
@@ -83,7 +91,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Character")
 	FName CharacterName;
 	
-
+	UPROPERTY()
+	FGameplayTag InputReleased;
 	UPROPERTY()
 	FGameplayTag DeadTag;
 	UPROPERTY()
@@ -98,6 +107,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Character | Abilities")
 	TSubclassOf<UGameplayEffect> DefaultAttributes;
 	
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Character | Components")
+	UAJ_CharacterMovementComponent* CharacterMovementComponent = nullptr;
 	
 	TWeakObjectPtr<UAJ_AbilitySystemComponent> AbilitySystemComponent;
 	TWeakObjectPtr<UAJ_AttributeSetBase> AttributeSetBase;
